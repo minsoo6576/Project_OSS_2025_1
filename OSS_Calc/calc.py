@@ -1,25 +1,25 @@
 import tkinter as tk
-
+from fractions import Fraction
 
 class Calculator:
     def __init__(self, root):
         self.root = root
         self.root.title("계산기")
-        self.root.geometry("300x400")
+        self.root.geometry("300x450")
 
         self.expression = ""
 
-        # 입력창
+        
         self.entry = tk.Entry(root, font=("Arial", 24), justify="right")
         self.entry.pack(fill="both", ipadx=8, ipady=15, padx=10, pady=10)
 
-        # 버튼 생성
+        
         buttons = [
             ['7', '8', '9', '/'],
             ['4', '5', '6', '*'],
             ['1', '2', '3', '-'],
             ['0', '.', 'C', '+'],
-            ['=']
+            ['=', '→분수']  
         ]
 
         for row in buttons:
@@ -39,7 +39,15 @@ class Calculator:
             self.expression = ""
         elif char == '=':
             try:
-                self.expression = str(eval(self.expression))
+                result = eval(self.expression)
+                self.expression = str(result)  \
+            except Exception:
+                self.expression = "에러"
+        elif char == '→분수':
+            try:
+                current = self.entry.get()
+                frac = Fraction(float(current)).limit_denominator()
+                self.expression = str(frac)
             except Exception:
                 self.expression = "에러"
         else:
@@ -47,6 +55,3 @@ class Calculator:
 
         self.entry.delete(0, tk.END)
         self.entry.insert(tk.END, self.expression)
-
-
-
