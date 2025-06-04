@@ -1,19 +1,20 @@
-import tkinter as tk
-
-
 class Calculator:
     def __init__(self, root):
         self.root = root
         self.root.title("계산기")
-        self.root.geometry("300x400")
+        self.root.geometry("300x500")  
 
         self.expression = ""
+        self.history = [] 
 
-        # 입력창
         self.entry = tk.Entry(root, font=("Arial", 24), justify="right")
         self.entry.pack(fill="both", ipadx=8, ipady=15, padx=10, pady=10)
 
-        # 버튼 생성
+       
+        self.history_box = tk.Listbox(root, font=("Arial", 12), height=5)
+        self.history_box.pack(fill="both", padx=10, pady=(0, 10))
+
+       
         buttons = [
             ['7', '8', '9', '/'],
             ['4', '5', '6', '*'],
@@ -21,7 +22,6 @@ class Calculator:
             ['0', '.', 'C', '+'],
             ['=']
         ]
-
         for row in buttons:
             frame = tk.Frame(root)
             frame.pack(expand=True, fill="both")
@@ -39,7 +39,11 @@ class Calculator:
             self.expression = ""
         elif char == '=':
             try:
-                self.expression = str(eval(self.expression))
+                result = str(eval(self.expression))
+              
+                self.history.append(f"{self.expression} = {result}")
+                self.history_box.insert(tk.END, f"{self.expression} = {result}")
+                self.expression = result
             except Exception:
                 self.expression = "에러"
         else:
@@ -47,6 +51,3 @@ class Calculator:
 
         self.entry.delete(0, tk.END)
         self.entry.insert(tk.END, self.expression)
-
-
-
